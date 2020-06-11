@@ -13,4 +13,5 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with: 
-          credentials: {{ secrets.FIREBASE_CRED }}
+          credentials: ${{ secrets.FIREBASE_CRED }}
+          config: ${{ secrets.FIREBASE_DEFAULT_USERS }}

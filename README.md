@@ -1,6 +1,4 @@
-<!-- <p align="left">
-  <a href="https://github.com/KillDozerX2/firebase-user-setter/actions"><img alt="firebase user setter test action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
-</p> -->
+![Ensure fulfillment](https://github.com/KillDozerX2/firebase-user-setter/workflows/Ensure%20fulfillment/badge.svg)
 
 # Automatically set Default Users and Custom Roles for your firebase project in your CI/CD pipeline.
 Firebase User Setter allows you to add default users directly to your project, you can also use it to set custom claims directly from you CI/CD pipeline.  
