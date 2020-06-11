@@ -1,0 +1,16 @@
+name: "Ensure fulfillment"
+on: 
+  pull_request:
+  push:
+    branches:
+      - master
+      - 'releases/*'
+
+jobs:
+  test: #make sure that the action works on the test firebase project.
+    runs-on: ubuntu-lates
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with: 
+          credentials: {{ secrets.FIREBASE_CRED }}

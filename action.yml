@@ -1,0 +1,16 @@
+name: "Firebase User Setter"
+author: "KillDozerX2"
+
+description: "Add Default users and/or custom claims to your firebase project."
+
+inputs:
+  credentials:
+    description: "Admin credentials json for connecting to application"
+    required: true
+
+  config:
+    description: "Configuration options for the action. Please read the config section in the readme."
+    required: true
+runs:
+  using: "node10"
+  main: "index.js"
