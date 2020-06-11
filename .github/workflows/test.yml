@@ -8,7 +8,7 @@ on:
 
 jobs:
   test: #make sure that the action works on the test firebase project.
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: ./
