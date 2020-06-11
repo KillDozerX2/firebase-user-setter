@@ -4,6 +4,7 @@
     "description": "This a simple npm script that will add default users with custom claims to your firebase project.",
     "main": "index.js",
     "scripts": {
+        "build": "rollup src/main.js --file dist/main.js --format cjs",
         "test": "node test"
     },
     "repository": {
