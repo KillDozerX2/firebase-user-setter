@@ -12,5 +12,5 @@ inputs:
     description: "Configuration options for the action. Please read the config section in the readme."
     required: true
 runs:
-  using: "node10"
+  using: "node12"
   main: "index.js"
