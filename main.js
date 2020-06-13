@@ -58,6 +58,27 @@ exports.FirebaseUserSetter = (adminAccountCredentials, usersConfig) => {
                     // Set the OAuth flag
                     account.UseOAuth = account.UseOAuth || false;
 
+                    // Set the AccountInfo property
+                    if (!account.accountInfo) {
+                        account.fields = {
+                            email: account.email
+                        }
+                    }
+                    else {
+                        account.fields = {
+                            email: account.email,
+                            password: account.password,
+                            uid: account.accountInfo.uid,
+                            emailVerified: account.accountInfo.emailVerified,
+                            phoneNumber: account.accountInfo.phoneNumber,
+                            displayName: account.accountInfo.displayName,
+                            photoURL: account.accountInfo.photoURL,
+                            disabled: account.accountInfo.disabled,
+                            providerData: [account.providerData]
+                        }
+                    }
+
+
                     //  The following condition checks if the user account existed in firebase auth.
                     if (account.record === null) {
                         // Create a record in firebase auth.
@@ -66,27 +87,21 @@ exports.FirebaseUserSetter = (adminAccountCredentials, usersConfig) => {
                                 console.error(`No providerData was given for user ${account.email}`);
                             }
                             else {
+                                // Delete the password property from account.fields
+                                delete account.fields.password;
                                 // Create an account using OAuth provider
                                 // Firebase only allows such accounts to be imported and not created.
                                 createOrUpdateUserAccountPromises.push(
-                                    fireAdmin.auth().importUsers([{
-                                        email: account.email,
-                                        password: account.password,
-                                        uid: account.accountInfo.uid,
-                                        emailVerified: account.accountInfo.emailVerified,
-                                        phoneNumber: account.accountInfo.phoneNumber,
-                                        displayName: account.accountInfo.displayName,
-                                        photoURL: account.accountInfo.photoURL,
-                                        disabled: account.accountInfo.disabled,
-                                        providerData: [account.providerData]
-                                    }]).then((userRecord) => {
-                                        account.record = userRecord;
-                                        return account;
-                                    }).catch(() => {
-                                        console.error(`Could not import user - ${account.email} with OAuth provider`);
-                                        account.record = null;
-                                        return account;
-                                    })
+                                    fireAdmin.auth().importUsers([account.fields])
+                                        .then((userRecord) => {
+                                            account.record = userRecord;
+                                            return account;
+                                        })
+                                        .catch(() => {
+                                            console.error(`Could not import user - ${account.email} with OAuth provider`);
+                                            account.record = null;
+                                            return account;
+                                        })
                                 );
                             }
                         }
@@ -96,51 +111,47 @@ exports.FirebaseUserSetter = (adminAccountCredentials, usersConfig) => {
                                 console.error(`A password was not provided for ${account.email}`)
                             }
                             else {
+                                // Delete the providerData from fields
+                                delete account.fields.providerData;
                                 // Push the create user promise on the array.
                                 createOrUpdateUserAccountPromises.push(
-                                    fireAdmin.auth().createUser({
-                                        email: account.email,
-                                        password: account.password,
-                                        uid: account.accountInfo.uid,
-                                        emailVerified: account.accountInfo.emailVerified,
-                                        phoneNumber: account.accountInfo.phoneNumber,
-                                        displayName: account.accountInfo.displayName,
-                                        photoURL: account.accountInfo.photoURL,
-                                        disabled: account.accountInfo.disabled
-                                    }).then((userRecord) => {
-                                        account.record = userRecord;
-                                        return account;
-                                    }).catch(() => {
-                                        console.error(`Could not create user - ${account.email} with email and password`);
-                                        account.record = null;
-                                        return account;
-                                    })
+                                    fireAdmin.auth().createUser(account.fields)
+                                        .then((userRecord) => {
+                                            account.record = userRecord;
+                                            return account;
+                                        })
+                                        .catch(() => {
+                                            console.error(
+                                                `Could not create user - ${account.email} with email and password`
+                                            );
+                                            account.record = null;
+                                            return account;
+                                        })
                                 )
                             }
                         }
                     }
                     else {
-                        if (account.forceUpdate) {
+                        // Check if forceUpdate flag is set to true or false
+                        if (account.forceUpdate === true) {
+                            // Push a new auth().updateUser promise to the array.
                             createOrUpdateUserAccountPromises.push(
                                 //  Update the user account
-                                fireAdmin.auth().updateUser(account.record.uid, {
-                                    email: account.email,
-                                    password: account.password,
-                                    emailVerified: account.accountInfo.emailVerified,
-                                    phoneNumber: account.accountInfo.phoneNumber,
-                                    displayName: account.accountInfo.displayName,
-                                    photoURL: account.accountInfo.photoURL,
-                                    disabled: account.accountInfo.disabled
-                                }).then((updatedUserRecord) => {
-                                    account.userRecord = updatedUserRecord;
-                                    return account;
-                                }).catch(() => {
-                                    console.error(`An error occured while updating user ${account.email}`);
-                                    return account;
-                                })
+                                fireAdmin.auth().updateUser(account.record.uid, account.fields)
+                                    .then((updatedUserRecord) => {
+                                        account.userRecord = updatedUserRecord;
+                                        return account;
+                                    })
+                                    .catch(() => {
+                                        console.error(
+                                            `An error occured while updating user ${account.email}`
+                                        );
+                                        return account;
+                                    })
                             );
                         }
                         else {
+                            // Push an empty promise to the array if forceUpdate is false.
                             createOrUpdateUserAccountPromises.push(
                                 Promise.resolve(account)
                             )

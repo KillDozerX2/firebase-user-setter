@@ -7,11 +7,12 @@ on:
       - 'releases/*'
 
 jobs:
-  test: #make sure that the action works on the test firebase project.
+  #make sure that the action works on the test firebase project using email and password
+  test: 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: ./
         with: 
           credentials: ${{ secrets.FIREBASE_CRED }}
-          config: ${{ secrets.FIREBASE_DEFAULT_USERS }}
+          config: ${{ secrets.FIREBASE_EMAIL_AND_PASSWORD_USERS }}

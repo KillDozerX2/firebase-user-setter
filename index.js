@@ -1,5 +1,5 @@
 const core = require('@actions/core');
-const main = require("./dist/main");
+const main = require('./main');
 
 try {
     // Get input provided by the user

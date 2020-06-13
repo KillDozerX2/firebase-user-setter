@@ -1,4 +1,5 @@
 ![Ensure fulfillment](https://github.com/KillDozerX2/firebase-user-setter/workflows/Ensure%20fulfillment/badge.svg)
+![Email and Password Test](https://github.com/KillDozerX2/firebase-user-setter/workflows/Email%20and%20Password%20Test/badge.svg)
 
 # Automatically set Default Users and Custom Roles for your firebase project in your CI/CD pipeline.
 Firebase User Setter allows you to add default users directly to your project, you can also use it to set custom claims directly from you CI/CD pipeline.  
@@ -107,3 +108,6 @@ Adds or updates users to Firebase Auth and/or adds custom claims
 
 ## Recommendation
 Please store the Admin Account credentials json and the config into secrets on your repository, you can use any other names for those secrets.
+
+## Contributing
+I'm currently looking for help with making tests for OAuth providers.
