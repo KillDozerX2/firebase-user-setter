@@ -95,10 +95,16 @@ exports.FirebaseUserSetter = (adminAccountCredentials, usersConfig) => {
                                     fireAdmin.auth().importUsers([account.fields])
                                         .then((userRecord) => {
                                             account.record = userRecord;
+                                            console.log(
+                                                `User - ${account.email} was created imported from its OAuth provider.`
+                                            );
                                             return account;
                                         })
-                                        .catch(() => {
-                                            console.error(`Could not import user - ${account.email} with OAuth provider`);
+                                        .catch((err) => {
+                                            console.error(
+                                                `Could not import user - ${account.email} with OAuth provider`
+                                            );
+                                            console.error(err.message);
                                             account.record = null;
                                             return account;
                                         })
@@ -118,12 +124,18 @@ exports.FirebaseUserSetter = (adminAccountCredentials, usersConfig) => {
                                     fireAdmin.auth().createUser(account.fields)
                                         .then((userRecord) => {
                                             account.record = userRecord;
+                                            console.log(
+                                                `User - ${account.email} was created successfully using email and password.`
+                                            );
                                             return account;
                                         })
-                                        .catch(() => {
+                                        .catch((err) => {
+                                            // Print an error message explaining that the user could not be created.
                                             console.error(
-                                                `Could not create user - ${account.email} with email and password`
+                                                `Could not create user - ${account.email} with email and password. Custom Claims(if provided) will not be set for this user.`
                                             );
+                                            // Log the error to the console.
+                                            console.error(err.message);
                                             account.record = null;
                                             return account;
                                         })
@@ -142,10 +154,11 @@ exports.FirebaseUserSetter = (adminAccountCredentials, usersConfig) => {
                                         account.userRecord = updatedUserRecord;
                                         return account;
                                     })
-                                    .catch(() => {
+                                    .catch((err) => {
                                         console.error(
-                                            `An error occured while updating user ${account.email}`
+                                            `An error occured while updating user ${account.email}. Firebase User Setter will Proceed with the existing record.`
                                         );
+                                        console.error(err.message);
                                         return account;
                                     })
                             );
@@ -163,17 +176,24 @@ exports.FirebaseUserSetter = (adminAccountCredentials, usersConfig) => {
                 Promise.all(createOrUpdateUserAccountPromises).then((userAccounts) => {
                     const setCustomClaimsPromises = [];
                     userAccounts.forEach((account) => {
-                        if (account.customClaims) {
+                        if (account.customClaims && account.record) {
                             setCustomClaimsPromises.push(
                                 fireAdmin.auth().setCustomUserClaims(account.record.uid, account.customClaims).then(() => {
-                                    console.log(`Custom claims for user ${account.email} were set successfully`);
-                                }).catch(() => {
-                                    console.log(`Custom claims for user ${account.email} could not be set`);
+                                    console.log(
+                                        `Custom claims for user ${account.email} were set successfully`
+                                    );
+                                }).catch((err) => {
+                                    console.error(
+                                        `Custom claims for user ${account.email} could not be set`
+                                    );
+                                    console.error(err.message);
                                 })
                             )
                         }
                         else {
-                            console.log(`No custom claims were provided for user ${account.email}`);
+                            console.error(
+                                `No custom claims were provided for user ${account.email}, or the user object could not be created earlier.`
+                            );
                             setCustomClaimsPromises.push(
                                 Promise.resolve()
                             )
