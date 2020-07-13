@@ -1,27 +1,27 @@
 {
-    "name": "firebase-user-setter",
-    "version": "1.0.0",
-    "description": "This a simple npm script that will add default users with custom claims to your firebase project.",
-    "main": "index.js",
-    "scripts": {
-        "build": "ncc build src/main.js",
-        "test": "node test"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/KillDozerX2/firebase-default-admin-action.git"
-    },
-    "author": "Himanshu Pant",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/KillDozerX2/firebase-default-admin-action/issues"
-    },
-    "homepage": "https://github.com/KillDozerX2/firebase-default-admin-action#readme",
-    "dependencies": {
-        "@actions/core": "^1.2.4",
-        "firebase-admin": "^8.12.1"
-    },
-    "devDependencies": {
-        "@zeit/ncc": "^0.22.3"
-    }
+	"name": "firebase-user-setter",
+	"version": "1.0.0",
+	"description": "This a simple npm script that will add default users with custom claims to your firebase project.",
+	"main": "index.js",
+	"scripts": {
+		"build": "ncc build index.js",
+		"test": "node test"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/KillDozerX2/firebase-default-admin-action.git"
+	},
+	"author": "Himanshu Pant",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/KillDozerX2/firebase-default-admin-action/issues"
+	},
+	"homepage": "https://github.com/KillDozerX2/firebase-default-admin-action#readme",
+	"dependencies": {
+		"@actions/core": "^1.2.4",
+		"firebase-admin": "^8.12.1"
+	},
+	"devDependencies": {
+		"@zeit/ncc": "^0.22.3"
+	}
 }
