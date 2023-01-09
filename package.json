@@ -19,7 +19,7 @@
 	"homepage": "https://github.com/KillDozerX2/firebase-default-admin-action#readme",
 	"dependencies": {
 		"@actions/core": "^1.2.4",
-		"firebase-admin": "^8.12.1"
+		"firebase-admin": "^11.4.1"
 	},
 	"devDependencies": {
 		"@zeit/ncc": "^0.22.3"
